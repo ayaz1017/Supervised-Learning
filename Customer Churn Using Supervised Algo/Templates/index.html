@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<style>
+    body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    width: 50%;
+    margin: 50px auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    color: black;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+button {
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: linear-gradient(to right, #ff4b2b, #ff416c);
+}
+
+</style>
+    <div class="container">
+        <h2>Customer Churn Prediction</h2>
+        <form id="predictForm">
+            <label>Gender:</label>
+            <select name="gender">
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+            </select>
+
+            <label>Senior Citizen:</label>
+            <select name="SeniorCitizen">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label>Partner:</label>
+            <select name="Partner">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Dependents:</label>
+            <select name="Dependents">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Tenure (months):</label>
+            <input type="number" name="tenure" required>
+
+            <label>Phone Service:</label>
+            <select name="PhoneService">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Multiple Lines:</label>
+            <select name="MultipleLines">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="No phone service">No phone service</option>
+            </select>
+
+            <label>Internet Service:</label>
+            <select name="InternetService">
+                <option value="DSL">DSL</option>
+                <option value="Fiber optic">Fiber optic</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Online Security:</label>
+            <select name="OnlineSecurity">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Online Backup:</label>
+            <select name="OnlineBackup">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Device Protection:</label>
+            <select name="DeviceProtection">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Tech Support:</label>
+            <select name="TechSupport">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Streaming TV:</label>
+            <select name="StreamingTV">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Streaming Movies:</label>
+            <select name="StreamingMovies">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Contract:</label>
+            <select name="Contract">
+                <option value="Month-to-month">Month-to-month</option>
+                <option value="One year">One year</option>
+                <option value="Two year">Two year</option>
+            </select>
+
+            <label>Paperless Billing:</label>
+            <select name="PaperlessBilling">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Payment Method:</label>
+            <select name="PaymentMethod">
+                <option value="Electronic check">Electronic check</option>
+                <option value="Mailed check">Mailed check</option>
+                <option value="Bank transfer">Bank transfer</option>
+                <option value="Credit card">Credit card</option>
+            </select>
+
+            <label>Monthly Charges:</label>
+            <input type="number" name="MonthlyCharges" step="0.01" required>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        <h3>Result: <span id="result"></span></h3>
+    </div>
+
+    <script>
+        document.getElementById("predictForm").onsubmit = async function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+            let response = await fetch("/predict", {
+                method: "POST",
+                body: formData
+            });
+
+            let result = await response.json();
+            document.getElementById("result").textContent =
+                result.error ? "Error: " + result.error : result.Prediction;
+        };
+    </script>
+</body>
+</html>
